@@ -1,10 +1,18 @@
+/*
+PROB: msquare
+LANG: C++
+ */
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <queue>
 #include <string>
 #include <assert.h>
 
 using namespace std;
+
+ifstream fin("msquare.in");
+ofstream fout("msquare.out");
 
 enum State {
   ZERO,
@@ -100,16 +108,20 @@ int test() {
   init.trans = "";
 
   //print(B(C(C(B(C(C(C(B(A(init))))))))));
-  
+
+  /*
   print(A(B(B(init))));
   print(B(A(B(init))));
   print(B(B(A(init))));
+  */
+
+  print(A(B(C(B(A(B(C(B(A(init))))))))));
 }
 
 int main() {
   Node expect;
   for(int i=0; i<8; i++) {
-    int c; cin>>c;
+    int c; fin>>c;
     expect.sq.push_back(c);
   }
   expect.state = ZERO;
@@ -127,12 +139,12 @@ int main() {
     q.pop();
 
     if(cmp(cur, expect)) {
-      cout << cur.trans.size() << endl;
-      cout << cur.trans << endl;
+      fout << cur.trans.size() << endl;
+      fout << cur.trans << endl;
       return 0;
     }
 
-    if(cur.state != A1) {
+    if(cur.state == ZERO || cur.state >= C1) {
       q.push(A(cur));     
     }    
     if(cur.state != B3) {      
@@ -143,3 +155,7 @@ int main() {
     }
   }
 }
+
+
+// 1. A,B are associative, if no c presents
+// 2. 
