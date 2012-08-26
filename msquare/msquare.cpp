@@ -93,6 +93,19 @@ bool cmp(const Node& n1, const Node& n2) {
   return true;
 }
 
+int test() {
+  Node init;
+  for(int i=0; i<8; i++) init.sq.push_back(i+1);
+  init.state = ZERO;
+  init.trans = "";
+
+  //print(B(C(C(B(C(C(C(B(A(init))))))))));
+  
+  print(A(B(B(init))));
+  print(B(A(B(init))));
+  print(B(B(A(init))));
+}
+
 int main() {
   Node expect;
   for(int i=0; i<8; i++) {
@@ -119,7 +132,7 @@ int main() {
       return 0;
     }
 
-    if(!cur.state == A1) {
+    if(cur.state != A1) {
       q.push(A(cur));     
     }    
     if(cur.state != B3) {      
