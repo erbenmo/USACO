@@ -8,11 +8,14 @@ LANG: C++
 #include <queue>
 #include <string>
 #include <assert.h>
+#include <map>
 
 using namespace std;
 
 ifstream fin("msquare.in");
 ofstream fout("msquare.out");
+
+map<int, bool> hash;
 
 enum State {
   ZERO,
@@ -26,7 +29,7 @@ enum State {
 };
 
 struct Node {
-  vector<int> sq;
+  vector<short> sq;
   State state;
   string trans;
 };
@@ -50,7 +53,7 @@ Node A(Node n) {
 }
 
 Node B(Node n) {
-  int temp = n.sq[0];
+  short temp = n.sq[0];
   n.sq[0] = n.sq[3];
   n.sq[3] = n.sq[2];
   n.sq[2] = n.sq[1];
@@ -75,7 +78,7 @@ Node B(Node n) {
 }
 
 Node C(Node n) {
-  int temp = n.sq[1];
+  short temp = n.sq[1];
   n.sq[1] = n.sq[6];
   n.sq[6] = n.sq[5];
   n.sq[5] = n.sq[2];
@@ -101,40 +104,54 @@ bool cmp(const Node& n1, const Node& n2) {
   return true;
 }
 
+int encode(const vector<short>& v) {
+  int result = v[0];
+  for(int i=1; i<8; i++) {
+    result *= 10;
+    result += v[i];
+  }
+    
+  assert(result < 88888888);
+  return result;
+}
+
+
 int test() {
   Node init;
-  for(int i=0; i<8; i++) init.sq.push_back(i+1);
+  for(int i=0; i<8; i++) init.sq.push_back((short)i+1);
   init.state = ZERO;
   init.trans = "";
 
+  cout << encode(init.sq) << endl;
   //print(B(C(C(B(C(C(C(B(A(init))))))))));
 
-  /*
-  print(A(B(B(init))));
-  print(B(A(B(init))));
-  print(B(B(A(init))));
-  */
+  
+  //print(A(B(B(init))));
+  //print(B(A(B(init))));
+  //print(B(B(A(init))));
+  
 
-  print(A(B(C(B(A(B(C(B(A(init))))))))));
+  //print(A(B(C(B(A(B(C(B(A(init))))))))));
 }
 
 int main() {
   Node expect;
   for(int i=0; i<8; i++) {
-    int c; fin>>c;
+    short c; fin>>c;
     expect.sq.push_back(c);
   }
   expect.state = ZERO;
 
   Node init;
-  for(int i=0; i<8; i++) init.sq.push_back(i+1);
+  for(int i=0; i<8; i++) init.sq.push_back((short)i+1);
   init.state = ZERO;
   init.trans = "";
 
   queue<Node> q;
   q.push(init);
+  hash[encode(init.sq)] = true;
 
-  while(!q.empty()) {    
+  while(!q.empty()) {
     Node cur = q.front();
     q.pop();
 
@@ -145,17 +162,33 @@ int main() {
     }
 
     if(cur.state == ZERO || cur.state >= C1) {
-      q.push(A(cur));     
+      Node a = A(cur);
+      int key = encode(a.sq);
+      if(hash[key] == false) {
+	hash[key] = true;
+	q.push(a);
+      }
     }    
-    if(cur.state != B3) {      
-      q.push(B(cur));
+    if(cur.state != B3) {
+      Node b = B(cur);
+      int key = encode(b.sq);
+      if(hash[key] == false) {
+	hash[key] = true;
+	q.push(b);
+      }
     }
     if(cur.state != C3) {
-      q.push(C(cur));
+      Node c = C(cur);
+      int key = encode(c.sq);
+      if(hash[key] == false) {
+	hash[key] = true;
+	q.push(c);
+      }      
     }
   }
+
+  return 0;
 }
 
 
 // 1. A,B are associative, if no c presents
-// 2. 
