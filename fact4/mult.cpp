@@ -137,6 +137,10 @@ int main() {
     p2->clear();
     clean(*p1);
     cur.clear();
+
+    if(p1->size() >= 20) {
+      p1->erase(p1->begin(), p1->begin() + p1->size() - 20);
+    }
   }
 
   //print(*p1);
