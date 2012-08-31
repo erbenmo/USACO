@@ -8,7 +8,7 @@ int det(int _a, int _b, int _c, int _d, int _e, int _f, int _g, int _h, int _i) 
 
 bool divide(int up, int down) {
   int ratio = up/down;
-  return ratio * down == up;
+  return ratio * down == up && ratio > 0;
 }
 
 int test() {

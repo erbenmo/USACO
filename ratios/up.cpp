@@ -6,6 +6,7 @@ LANG: C++
 #include <fstream>
 
 using namespace std;
+bool ok;
 ifstream fin("ratios.in");
 ofstream fout("ratios.out");
 
@@ -18,7 +19,7 @@ int det(int _a, int _b, int _c, int _d, int _e, int _f, int _g, int _h, int _i) 
 
 bool divide(int up, int down) {
   int ratio = up/down;
-  return ratio * down == up;
+  return ratio * down == up && ratio >= 0;
 }
 
 int test() {
@@ -64,9 +65,14 @@ int main() {
     if(!divide(up3, base))
       continue;
 
+    ok = true;
     break;
   }
 
-  x = up1/base, y=up2/base, z=up3/base;
-  cout << x << " " << y << " "<< z << " "<< t << endl;
+  if(ok) {
+    x = up1/base, y=up2/base, z=up3/base;
+    cout << x << " " << y << " "<< z << " "<< t << endl;
+  } else {
+    cout << "NONE\n";
+  }
 }
