@@ -117,11 +117,10 @@ int main() {
 
       if(ok) {
 	cout << t << endl;
-	return 1;
+	return 0;
       }
     }
   }
 
   cout << "none\n";
-  return 1;
 }
