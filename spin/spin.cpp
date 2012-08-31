@@ -1,8 +1,21 @@
+/*
+PROB: spin
+LANG: C++
+*/
+
 #include <iostream>
+#include <fstream>
 #include <vector>
+#include <assert.h>
 
 using namespace std;
+ifstream fin("spin.in");
+ofstream fout("spin.out");
 
+#define cin fin
+#define cout fout
+
+int count_print = 0;
 
 struct wedge {
   wedge(int _s, int _e) {s = _s, e = _e;}
@@ -14,6 +27,7 @@ int speed[5];
 vector<vector<wedge> > wheels;
 
 void print() {
+  cout << count_print++ << endl;
   for(int i=0; i<360; i++) {
     cout << i << ": ";
     for(int j=0; j<5; j++) {
@@ -21,9 +35,13 @@ void print() {
     }
     cout << endl;
   }
+
+  cout << endl << endl;
 }
 
 void rot(int &s, int dx) {
+  assert(s<360);
+  assert(s>=0);
   s = (s+dx) % 360;
 }
 
@@ -35,22 +53,27 @@ int main() {
     wheels.push_back(wheel);
   }
 
+
   for(int i=0; i<5; i++) {
     cin>>speed[i];
     int wedge_num;
     cin>>wedge_num;
 
     for(int j=0; j<wedge_num; j++) {
-      int s, e;
-      cin>>s>>e;
+      int s, l;
+      cin>>s>>l;
+      int e = s;
+      rot(e, l);
       wheels[i].push_back(wedge(s,e));
-      for(int k=s; k<=e; rot(k, 1)) {
+
+      int k = s;
+      while(true) {
 	global[k][i]++;
+	if(k == e) break;
+	rot(k, 1);
       }
     }
   }
-
-  print();
 
   for(t=0; t<360; t++) {
     // rotate
@@ -59,18 +82,25 @@ int main() {
     for(int i=0; i<5; i++) {
       int dfi = speed[i]*1;
       for(int j=0; j<wheels[i].size(); j++) {
-	int s=wheels[i][j].s, e=wheels[i][j].e;
+	int& s = wheels[i][j].s;
+	int& e = wheels[i][j].e;
 	// remove old mark
-	for(int k=s; k<=e; rot(k, 1)) {
+	int k=s;
+	while(true) {
 	  global[k][i]--;
+	  if(k == e) break;
+	  rot(k, 1);
 	}
 
 	rot(s, dfi);
 	rot(e, dfi);
 
 	// add new mark
-	for(int k=s; k<=e; rot(k, 1)) {
+	k = s;
+	while(true) {
 	  global[k][i]++;
+	  if(k == e) break;
+	  rot(k, 1);
 	}
       }
     }
