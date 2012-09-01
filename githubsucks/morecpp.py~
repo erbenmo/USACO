@@ -1,4 +1,0 @@
-for i in range(10000):
-    name = str(i) + '.txt'
-    print name
-    $f = open()
