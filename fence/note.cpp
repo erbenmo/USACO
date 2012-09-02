@@ -11,7 +11,7 @@ using namespace std;
 ifstream fin("fence.in");
 ofstream fout("fence.out");
 #define cin fin
-#define cout fout
+//#define cout fout
 
 vector<vector<int> > links;
 stack<int> answer;
@@ -40,7 +40,6 @@ void delete_link(int s, int e) {
   for(int i=0; i<links[s].size(); i++) {
     if(links[s][i] == e) {
       links[s].erase(links[s].begin() + i);
-      break;
     }
   }
 }
@@ -63,7 +62,7 @@ int main() {
     insert_link(e,s);
   }
 
-  //  print();
+  print();
 
   int cur;
   stack<int> s;
@@ -89,7 +88,7 @@ int main() {
     s.pop();
 
   process_node:
-    //cout << "size: " << s.size() << endl;
+    cout << "!\n";
     if(links[cur].size() == 0) {
       answer.push(cur);
       continue;
