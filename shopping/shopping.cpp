@@ -1,9 +1,18 @@
+/*
+PROB: shopping
+LANG: C++
+*/
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <map>
 #include <assert.h>
 
 using namespace std;
+ifstream fin("shopping.in");
+ofstream fout("shopping.out");
+#define cin fin
+#define cout fout
 
 int num_offer, num_products;
 int need[5];
@@ -114,8 +123,6 @@ int main() {
 
     index = c2index[c];
 
-    cout << "c: " << c << ", index: " << index << endl;
-
     assert(index <= 4 && index >= 0);
     assert(ofs_price[num_offer + index] == 0);
 
@@ -125,7 +132,7 @@ int main() {
     ofs_price[num_offer + index] = price;
   }
 
-  print();
+//print();
   
   // finally start DP
   int hash[7776];
@@ -133,17 +140,7 @@ int main() {
   int final_id = encode(need);
   
   for(int i=0; i<num_offer + num_products; i++) {
-    for(int bag_id=0; bag_id<7776; bag_id++) {
-      int bag[5];
-      decode(bag_id, bag);
-      if(too_big(bag))
-	continue;
-
-      cout << "bag: ";
-      for(int i=0; i<num_products; i++) cout << bag[i] << " ";
-      cout << " with value: " << hash[bag_id] << endl;
-    }
-    cout << endl << endl << endl << endl;
+    
     
     for(int bag_id=0; bag_id<7776; bag_id++) {
       int bag[5];
@@ -175,6 +172,20 @@ int main() {
 			   hash[remain_id] + ofs_price[i]);
       }
     }
+
+
+    /*
+    for(int bag_id=0; bag_id<7776; bag_id++) {
+      int bag[5];
+      decode(bag_id, bag);
+      if(too_big(bag))
+	continue;
+
+      cout << "bag: ";
+      for(int i=0; i<num_products; i++) cout << bag[i] << " ";
+      cout << " with value: " << hash[bag_id] << endl;
+      }*/
+    //cout << endl << endl << endl << endl;
   }
 
   cout << hash[final_id] << endl;
