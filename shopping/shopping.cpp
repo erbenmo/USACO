@@ -14,6 +14,8 @@ int ofs_price[99+5];
 int products = 0;
 map<int, int> c2index;
 
+//const int max_price = 25000;
+
 
 int step[5] = {6*6*6*6, 6*6*6, 6*6, 6, 1}; // base 6
 
@@ -42,6 +44,39 @@ void print() {
       cout << ofs_num[i][j] << " ";
     }
     cout << " with price: " << ofs_price[i] << endl;
+  }
+
+  cout << "need: ";
+  for(int i=0; i<num_products; i++)
+    cout << need[i] << " ";
+  cout << endl << endl;
+}
+
+// true ~ >=
+bool cmp_bag(int a[5], int b[5]) {
+  for(int i=0; i<5; i++) {    
+    if(a[i] < b[i])
+      return false;
+  }
+
+  return true;
+}
+
+bool too_big(int a[5]) {
+  for(int i=0; i<5; i++) {
+    if(a[i] > need[i])
+      return true;
+  }
+
+  return false;
+}
+
+void subtract(int source[5], int d[5], int remain[5]) {
+  for(int i=0; i<5; i++) {
+    int rem = source[i] - d[i];
+    //cout << rem << endl;
+    assert(rem >= 0);
+    remain[i] = rem;
   }
 }
 
@@ -73,9 +108,14 @@ int main() {
     int c, k, price, index;
     
     cin>>c>>k>>price;
+
+    if(c2index.find(c) == c2index.end())
+      c2index[c] = products++;
+
     index = c2index[c];
 
-    assert(c2index.find(c) != c2index.end());
+    cout << "c: " << c << ", index: " << index << endl;
+
     assert(index <= 4 && index >= 0);
     assert(ofs_price[num_offer + index] == 0);
 
@@ -87,24 +127,55 @@ int main() {
 
   print();
   
-  /*
   // finally start DP
   int hash[7776];
+  for(int i=1; i<7776; i++) hash[i] = -1;
+  int final_id = encode(need);
   
-  for(int i=0; i<ofs.size(); i++) {
-    for(int s0=0; s0<=needs[0]; s0++)
-      for(int s1=0; s1<=needs[1]; s1++)
-	for(int s2=0; s2<=needs[2]; s2++)
-	  for(int s3=0; s3<=needs[3]; s3++)
-	    for(int s4=0; s4<=needs[4]; s4++) {
-	      int bag[5];
-	      bag[0]=s0, bag[1]=s1, bag[2]=s2, bag[3]=s3, bag[4]=s4;	      
-	      int bag_id = encode(bag);
+  for(int i=0; i<num_offer + num_products; i++) {
+    for(int bag_id=0; bag_id<7776; bag_id++) {
+      int bag[5];
+      decode(bag_id, bag);
+      if(too_big(bag))
+	continue;
 
-	      
-	    }
+      cout << "bag: ";
+      for(int i=0; i<num_products; i++) cout << bag[i] << " ";
+      cout << " with value: " << hash[bag_id] << endl;
+    }
+    cout << endl << endl << endl << endl;
+    
+    for(int bag_id=0; bag_id<7776; bag_id++) {
+      int bag[5];
+      decode(bag_id, bag);
+
+      if(too_big(bag))
+	continue;
+
+      if(cmp_bag(bag, ofs_num[i])) {
+	int remain[5];
+	int remain_id;
+
+	/*
+	for(int x=0; x<5; x++) cout << bag[x] << " ";
+	cout << " -  ";
+	for(int x=0; x<5; x++) cout << ofs_num[i][x] << " ";
+	cout << endl;
+	*/
+	
+	subtract(bag, ofs_num[i], remain);
+	remain_id = encode(remain);
+
+	if(hash[remain_id] == -1)
+	  continue;
+	if(hash[bag_id] == -1)
+	  hash[bag_id] = hash[remain_id] + ofs_price[i];
+	else
+	  hash[bag_id] = min(hash[bag_id],
+			   hash[remain_id] + ofs_price[i]);
+      }
+    }
   }
 
-  int final_bag_id = encode(need);
-  cout << hash[final_bag_id];*/
+  cout << hash[final_id] << endl;
 }

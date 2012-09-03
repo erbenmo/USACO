@@ -27,7 +27,6 @@ void decode(int res, int data[5]) {
 }
 
 int main() {
-  /*
   for(int s1=0; s1<=5; s1++)
     for(int s2=0; s2<=5; s2++)
       for(int s3=0; s3<=5; s3++)
@@ -45,7 +44,6 @@ int main() {
 	    cout << encode(data);
 	    cout << endl;
 	  }
-  */
 
   /*
   for(int res=0; res<7776; res++) {
