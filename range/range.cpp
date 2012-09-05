@@ -29,8 +29,8 @@ int main() {
     }
     cin.read(&c, 1);
   }
- 
-  for(int i=2; i<=N-1; i++) {
+
+  for(int i=2; i<=N; i++) {
     int result = 0;
 
     for(int y=0; y<=N-i; y++) {
