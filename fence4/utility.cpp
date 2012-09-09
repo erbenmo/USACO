@@ -24,15 +24,16 @@ int main() {
   v Cpp(0, 0.9999);
   v D(1, 1);
 
-  cout << same_side(A, D, C, B) << endl;
-  cout << same_side(A, B, C, D) << endl;
+  //cout << same_side(A, D, C, B) << endl;
+  //cout << same_side(A, B, C, D) << endl;
 
-  cout << intersect(A, C, B, D) << endl;
-  cout << intersect(A, D, C, B) << endl;
+  //cout << intersect(A, C, B, D) << endl;
+  //cout << intersect(A, D, C, B) << endl;
+  cout << intersect(A, B, D, C) << endl;
 
-  cout << same_side(A, C, C, D) << endl;
-  cout << intersect(A, C, C, D) << endl;
+  //cout << same_side(A, C, C, D) << endl;
+  //cout << intersect(A, C, C, D) << endl;
 
-  cout << intersect(A, C, Cp, D) << endl;
+  //cout << intersect(A, C, Cp, D) << endl;
 
 }
